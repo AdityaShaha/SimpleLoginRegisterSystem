@@ -2,7 +2,8 @@ package com;
 
 public class LoginUser {
     public boolean AuthorizeUser(String username, String password) {
-        if(username == "Aditya" && password == "abc12345678") {
+        if(username.equals("Aditya") && password.equals("abc123")) {
+
             return true;
         }
         return false;

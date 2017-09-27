@@ -6,6 +6,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    HttpSession session = request.getSession();
+ %>
 <html>
 <head>
     <title>Welcome</title>
@@ -16,8 +19,21 @@
 </head>
 <body>
 <div class="container">
-    <h1>Welcome <% out.println(request.getParameter("user")); %></h1>
+    <h1>Welcome <% out.println(session.getAttribute("username")); %></h1>
+    <form action="" method="post">
+        <input type="submit" value="LOGOUT" class="alert alert-danger" name="logout">
+    </form>
+
 </div>
 
 </body>
 </html>
+<%
+    if(request.getParameter("logout")!=null) {
+
+
+        session.invalidate();
+        out.println("<div class=\"alert alert-danger\" role=\"alert\">Logged Out!</div>");
+    }
+
+%>

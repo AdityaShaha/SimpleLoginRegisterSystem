@@ -1,4 +1,4 @@
-<%@ page import="java.util.Date,com.*" %><%--
+<%@ page import="java.util.Date,com.* , com.*" %><%--
   Created by IntelliJ IDEA.
   User: Aditya Shaha
   Date: 27/9/17
@@ -15,80 +15,51 @@
     <title>Registration</title>
   </head>
   <body>
-
-
-
-  <%
-    java.util.Date today = new java.util.Date();
-    String strToday = today.toString();
-  %>
-  <%
-    LoginUser Auth = new LoginUser();
-  %>
-
-  <div class="container">
-
   <h1 class="text-center">LOGIN</h1>
+  <div class="container">
+  <%
+    if(request.getParameter("login")!=null) {
+      String username = request.getParameter("username");
+      String password = request.getParameter("password");
+      LoginUser UserLogin = new LoginUser();
 
-    <%
-      int ValidationResponseNo;
-      String ValidationResponse;
-      if(request.getParameter("submit")!=null){
+      boolean Auth = UserLogin.AuthorizeUser(username,password);
 
-        String username = request.getParameter("user");
-        String password = request.getParameter("password");
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
-        String email = request.getParameter("email");
-        String role = request.getParameter("role");
-        String age = request.getParameter("age");
-
-        RegisterUser User = new RegisterUser();
-
-        ValidationResponseNo = User.ValidateUser(username,password,firstName,lastName,email,role,age);
-        ValidationResponse = User.ValidationError(ValidationResponseNo);
-
-        if(ValidationResponseNo == 0) {
-            RequestDispatcher router = request.getRequestDispatcher("/Welcome.jsp");
-            router.forward(request,response);
-            out.println("<div class=\"alert alert-success\" role=\"alert\">Added Successfully</div>");
-        } else {
-          out.println("<div class=\"alert alert-danger\" role=\"alert\">"+ ValidationResponse +"</div>");
-        }
+      if(Auth == true) {
+          System.out.println("Yeah");
+          Cookie UserCookie = new Cookie("uname",username);
+          response.addCookie(UserCookie);
+          response.setContentType("text/html");
+          RequestDispatcher router = request.getRequestDispatcher("/Welcome.jsp");
+          router.forward(request,response);
+      } else {
+        out.println("<div class=\"alert alert-danger\" role=\"alert\">Invalid Credentials</div>");
       }
-    %>
-    <form action="" method="post">
+    }
+  %>
+  <form action="" method="post">
     <div class="form-group">
       <label for="username">Username</label>
-      <input type="text" class="form-control" name="user">
+      <input type="text" name="username" class="form-control">
     </div>
     <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" class="form-control" name="password">
+      <input type="password" name="password" class="form-control"><br/>
     </div>
     <div class="form-group">
-      <label for="firstName">FirstName</label>
-      <input type="text" class="form-control" name="firstName">
+      <input type="submit" value="Login" class="btn btn-primary" name="login">
+      <input type="submit" value="Register" class="btn btn-success pull-right" name="register">
     </div>
-    <div class="form-group">
-      <label for="lastName">LastName</label>
-      <input type="text" class="form-control" name="lastName">
-    </div>
-    <div class="form-group">
-      <label for="age">Age</label>
-      <input type="text" class="form-control" name="age">
-    </div>
-    <div class="form-group">
-      <label for="role">Email</label>
-      <input type="text" class="form-control" name="email">
-    </div>
-    <div class="form-group">
-      <label for="role">Role</label>
-      <input type="text" class="form-control" name="role">
-    </div>
-    <input type="submit" name="submit" value="CreateAccout" class="btn btn-primary">
   </form>
+    <a href="Welcome.jsp">Goto Welcome</a>
   </div>
   </body>
 </html>
+
+<%
+  if(request.getParameter("register")!=null) {
+      RequestDispatcher router = request.getRequestDispatcher("/Register.jsp");
+      router.forward(request,response);
+  }
+%>
 
